@@ -74,7 +74,8 @@ if uploaded_file:
 
         st.dataframe(df_compare[[
             "NIPP_Pekerja_bawahan", "NIPP_Atasan",
-            "Skor_KPI_Final"]
+            "Skor_KPI_Final"
+             ]])
     else:
         st.warning("Kolom 'NIPP_Atasan' atau 'NIPP_Pekerja' tidak ditemukan di file Anda.")
 
