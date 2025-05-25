@@ -73,8 +73,11 @@ if uploaded_file:
         st.pyplot(fig)
 
         st.dataframe(df_compare[[
-            "NIPP_Pekerja_bawahan", "Nama_Posisi_bawahan", "NIPP_Atasan"
-        ] + score_cols + [f"Gap_{col}" for col in score_cols]])
+            "NIPP_Pekerja_bawahan", "Nama_Posisi_bawahan", "NIPP_Atasan",
+            "Skor_KPI_Final_bawahan", "Skor_KPI_Final_atasan", "Gap_Skor_KPI_Final",
+            "Skor_Assessment_bawahan", "Skor_Assessment_atasan", "Gap_Skor_Assessment",
+            "Skor_Kinerja_Individu_bawahan", "Skor_Kinerja_Individu_atasan", "Gap_Skor_Kinerja_Individu"
+        ]])
     else:
         st.warning("Kolom 'NIPP_Atasan' atau 'NIPP_Pekerja' tidak ditemukan di file Anda.")
 
