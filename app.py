@@ -30,18 +30,21 @@ else:
     if skor_bawahan.empty:
         st.warning("Tidak ada data bawahan untuk NIPP atasan ini.")
     else:
-        # Distribusi Normal
-        st.subheader("Distribusi Normal Skor KPI Bawahan")
+        # Distribusi Normal + Bar Chart per NIPP
+        st.subheader("Distribusi Skor KPI Bawahan (dengan NIPP)")
         mean = skor_bawahan.mean()
         std = skor_bawahan.std()
         x = np.linspace(skor_bawahan.min() - 5, skor_bawahan.max() + 5, 100)
         y = norm.pdf(x, mean, std)
 
-        fig, ax = plt.subplots()
-        sns.histplot(skor_bawahan, bins=10, kde=False, stat="density", color='skyblue', ax=ax)
-        ax.plot(x, y, color='red', label='Kurva Normal')
-        ax.axvline(skor_atasan, color='green', linestyle='--', label=f'Skor Atasan ({skor_atasan})')
-        ax.axvline(mean, color='blue', linestyle='--', label=f'Rata-rata ({mean:.2f})')
+        fig, ax = plt.subplots(figsize=(10, 6))
+        nipp_labels = bawahan_group_df['NIPP_Pekerja'].astype(str).values
+        ax.bar(nipp_labels, skor_bawahan, color='skyblue')
+        ax.axhline(skor_atasan, color='green', linestyle='--', label=f'Skor Atasan ({skor_atasan})')
+        ax.axhline(mean, color='blue', linestyle='--', label=f'Rata-rata ({mean:.2f})')
+        ax.set_ylabel("Skor KPI")
+        ax.set_xlabel("NIPP Pekerja")
+        ax.set_xticklabels(nipp_labels, rotation=45, ha='right')
         ax.legend()
         st.pyplot(fig)
 
@@ -64,5 +67,4 @@ else:
         st.markdown(f"**Rata-rata Skor KPI Bawahan**: {mean:.2f}")
         st.markdown(f"**Skor KPI Atasan**: {skor_atasan:.2f}")
         st.markdown(f"**Gap Atasan vs Rata-rata Bawahan**: {gap_percent:.2f}%")
-
 
