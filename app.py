@@ -14,16 +14,11 @@ df = load_data()
 
 st.title("Analisis Perbandingan KPI Atasan dan Bawahan")
 
-# Pilih NIPP Atasan dan NIPP Pegawai
-col1, col2 = st.columns(2)
-with col1:
-    nipp_atasan = st.selectbox("Pilih NIPP Atasan:", sorted(df['NIPP_Pekerja'].dropna().unique()))
-with col2:
-    nipp_bawahan = st.selectbox("Pilih NIPP Pegawai (Bawahan):", sorted(df['NIPP_Pekerja'].dropna().unique()))
+# Pilih NIPP Atasan
+nipp_atasan = st.selectbox("Pilih NIPP Atasan:", sorted(df['NIPP_Pekerja'].dropna().unique()))
 
 # Filter data
 atasan_df = df[df['NIPP_Pekerja'] == nipp_atasan]
-bawahan_df = df[(df['NIPP_Pekerja'] == nipp_bawahan) & (df['NIPP_Atasan'] == nipp_atasan)]
 bawahan_group_df = df[df['NIPP_Atasan'] == nipp_atasan]
 
 if atasan_df.empty or bawahan_group_df.empty:
@@ -50,6 +45,10 @@ else:
         ax.legend()
         st.pyplot(fig)
 
+        # Tampilkan daftar NIPP Bawahan
+        st.markdown("**Daftar NIPP Bawahan yang Dinaungi oleh Atasan Ini:**")
+        st.write(bawahan_group_df['NIPP_Pekerja'].dropna().unique())
+
         # Skewness
         skewness = skew(skor_bawahan)
         if skewness < -0.5:
@@ -65,4 +64,5 @@ else:
         st.markdown(f"**Rata-rata Skor KPI Bawahan**: {mean:.2f}")
         st.markdown(f"**Skor KPI Atasan**: {skor_atasan:.2f}")
         st.markdown(f"**Gap Atasan vs Rata-rata Bawahan**: {gap_percent:.2f}%")
+
 
