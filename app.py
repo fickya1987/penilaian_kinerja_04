@@ -44,7 +44,9 @@ else:
         ax1.axhline(mean, color='blue', linestyle='--', linewidth=2, label=f'Rata-rata ({mean:.2f})')
         ax1.set_ylabel("Skor KPI")
         ax1.set_xlabel("NIPP Pekerja")
+        ax1.set_xticks(range(len(nipp_labels)))
         ax1.set_xticklabels(nipp_labels, rotation=45, ha='right')
+        ax1.set_yticks(np.arange(0, 131, 10))  # Set y-axis from 0 to 130 with step 10
 
         # Distribusi Normal Overlay
         ax2 = ax1.twinx()
