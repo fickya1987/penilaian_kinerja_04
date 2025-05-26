@@ -39,21 +39,21 @@ else:
 
         # Bar chart KPI Bawahan
         nipp_labels = bawahan_group_df['NIPP_Pekerja'].astype(str).values
-        bars = ax1.bar(nipp_labels, skor_bawahan, color='skyblue', label='Skor KPI Bawahan', zorder=1)
+        x_bar_pos = np.arange(len(nipp_labels))
+        bars = ax1.bar(x_bar_pos, skor_bawahan, color='skyblue', label='Skor KPI Bawahan', zorder=1)
         ax1.axhline(skor_atasan, color='green', linestyle='--', linewidth=2, label=f'Skor Atasan ({skor_atasan:.3f})', zorder=2)
         ax1.axhline(mean, color='blue', linestyle='--', linewidth=2, label=f'Rata-rata ({mean:.2f})', zorder=2)
         ax1.set_ylabel("Skor KPI")
         ax1.set_xlabel("NIPP Pekerja")
-        ax1.set_xticks(range(len(nipp_labels)))
+        ax1.set_xticks(x_bar_pos)
         ax1.set_xticklabels(nipp_labels, rotation=45, ha='right')
         ax1.set_yticks(np.arange(90, 112, 2))  # Y-axis from 90 to 110
         ax1.set_ylim(90, 112)
 
-        # Distribusi Normal Overlay matching x-axis position of bars
-        x_bar_pos = np.arange(len(skor_bawahan))
+        # Distribusi Normal Overlay aligned with bar positions
         x = np.linspace(min(x_bar_pos)-0.5, max(x_bar_pos)+0.5, 500)
         y = norm.pdf(x, np.mean(x_bar_pos), np.std(x_bar_pos))
-        y_scaled = (y / y.max()) * (ax1.get_ylim()[1] - ax1.get_ylim()[0]) * 0.5 + 90
+        y_scaled = (y / y.max()) * (ax1.get_ylim()[1] - ax1.get_ylim()[0]) * 0.3 + ax1.get_ylim()[0]
         ax1.plot(x, y_scaled, color='red', label='Kurva Normal', zorder=0)
 
         fig.tight_layout()
@@ -79,3 +79,4 @@ else:
         st.markdown(f"**Rata-rata Skor KPI Bawahan**: {mean:.2f}")
         st.markdown(f"**Skor KPI Atasan**: {skor_atasan:.2f}")
         st.markdown(f"**Gap Atasan vs Rata-rata Bawahan**: {gap_percent:.2f}%")
+
