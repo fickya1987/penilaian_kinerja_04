@@ -39,7 +39,7 @@ else:
 
         # Bar chart KPI Bawahan
         nipp_labels = bawahan_group_df['NIPP_Pekerja'].astype(str).values
-        ax1.bar(nipp_labels, skor_bawahan, color='skyblue', label='Skor KPI Bawahan', zorder=1)
+        bars = ax1.bar(nipp_labels, skor_bawahan, color='skyblue', label='Skor KPI Bawahan', zorder=1)
         ax1.axhline(skor_atasan, color='green', linestyle='--', linewidth=2, label=f'Skor Atasan ({skor_atasan:.3f})', zorder=2)
         ax1.axhline(mean, color='blue', linestyle='--', linewidth=2, label=f'Rata-rata ({mean:.2f})', zorder=2)
         ax1.set_ylabel("Skor KPI")
@@ -49,10 +49,11 @@ else:
         ax1.set_yticks(np.arange(90, 112, 2))  # Y-axis from 90 to 110
         ax1.set_ylim(90, 112)
 
-        # Distribusi Normal Overlay on same axis
-        x = np.linspace(90, 112, 500)
-        y = norm.pdf(x, mean, std)
-        y_scaled = (y / y.max()) * (ax1.get_ylim()[1] - ax1.get_ylim()[0]) * 0.5 + 90  # scale and shift
+        # Distribusi Normal Overlay matching x-axis position of bars
+        x_bar_pos = np.arange(len(skor_bawahan))
+        x = np.linspace(min(x_bar_pos)-0.5, max(x_bar_pos)+0.5, 500)
+        y = norm.pdf(x, np.mean(x_bar_pos), np.std(x_bar_pos))
+        y_scaled = (y / y.max()) * (ax1.get_ylim()[1] - ax1.get_ylim()[0]) * 0.5 + 90
         ax1.plot(x, y_scaled, color='red', label='Kurva Normal', zorder=0)
 
         fig.tight_layout()
