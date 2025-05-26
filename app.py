@@ -39,22 +39,21 @@ else:
 
         # Bar chart KPI Bawahan
         nipp_labels = bawahan_group_df['NIPP_Pekerja'].astype(str).values
-        ax1.bar(nipp_labels, skor_bawahan, color='skyblue', label='Skor KPI Bawahan')
-        ax1.axhline(skor_atasan, color='green', linestyle='--', linewidth=2, label=f'Skor Atasan ({skor_atasan:.3f})')
-        ax1.axhline(mean, color='blue', linestyle='--', linewidth=2, label=f'Rata-rata ({mean:.2f})')
+        ax1.bar(nipp_labels, skor_bawahan, color='skyblue', label='Skor KPI Bawahan', zorder=1)
+        ax1.axhline(skor_atasan, color='green', linestyle='--', linewidth=2, label=f'Skor Atasan ({skor_atasan:.3f})', zorder=2)
+        ax1.axhline(mean, color='blue', linestyle='--', linewidth=2, label=f'Rata-rata ({mean:.2f})', zorder=2)
         ax1.set_ylabel("Skor KPI")
         ax1.set_xlabel("NIPP Pekerja")
         ax1.set_xticks(range(len(nipp_labels)))
         ax1.set_xticklabels(nipp_labels, rotation=45, ha='right')
-        ax1.set_yticks(np.arange(90, 112, 2))  # Set y-axis from 90 to 110 with step 2
+        ax1.set_yticks(np.arange(90, 112, 2))  # Y-axis from 90 to 110
+        ax1.set_ylim(90, 112)
 
-        # Distribusi Normal Overlay
-        ax2 = ax1.twinx()
-        x = np.linspace(min(skor_bawahan)-5, max(skor_bawahan)+5, 200)
+        # Distribusi Normal Overlay on same axis
+        x = np.linspace(90, 112, 500)
         y = norm.pdf(x, mean, std)
-        ax2.plot(x, y, color='red', label='Kurva Normal')
-        ax2.set_ylabel("Density", color='red')
-        ax2.tick_params(axis='y', labelcolor='red')
+        y_scaled = (y / y.max()) * (ax1.get_ylim()[1] - ax1.get_ylim()[0]) * 0.5 + 90  # scale and shift
+        ax1.plot(x, y_scaled, color='red', label='Kurva Normal', zorder=0)
 
         fig.tight_layout()
         fig.legend(loc='upper left', bbox_to_anchor=(0.01, 0.99))
@@ -79,4 +78,3 @@ else:
         st.markdown(f"**Rata-rata Skor KPI Bawahan**: {mean:.2f}")
         st.markdown(f"**Skor KPI Atasan**: {skor_atasan:.2f}")
         st.markdown(f"**Gap Atasan vs Rata-rata Bawahan**: {gap_percent:.2f}%")
-
