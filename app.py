@@ -46,7 +46,7 @@ else:
         ax1.set_xlabel("NIPP Pekerja")
         ax1.set_xticks(range(len(nipp_labels)))
         ax1.set_xticklabels(nipp_labels, rotation=45, ha='right')
-        ax1.set_yticks(np.arange(0, 131, 10))  # Set y-axis from 0 to 130 with step 10
+        ax1.set_yticks(np.arange(90, 112, 2))  # Set y-axis from 90 to 110 with step 2
 
         # Distribusi Normal Overlay
         ax2 = ax1.twinx()
@@ -79,3 +79,4 @@ else:
         st.markdown(f"**Rata-rata Skor KPI Bawahan**: {mean:.2f}")
         st.markdown(f"**Skor KPI Atasan**: {skor_atasan:.2f}")
         st.markdown(f"**Gap Atasan vs Rata-rata Bawahan**: {gap_percent:.2f}%")
+
