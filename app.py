@@ -34,18 +34,28 @@ else:
         st.subheader("Distribusi Skor KPI Bawahan (dengan NIPP)")
         mean = skor_bawahan.mean()
         std = skor_bawahan.std()
-        x = np.linspace(skor_bawahan.min() - 5, skor_bawahan.max() + 5, 100)
-        y = norm.pdf(x, mean, std)
 
-        fig, ax = plt.subplots(figsize=(10, 6))
+        fig, ax1 = plt.subplots(figsize=(12, 6))
+
+        # Bar chart KPI Bawahan
         nipp_labels = bawahan_group_df['NIPP_Pekerja'].astype(str).values
-        ax.bar(nipp_labels, skor_bawahan, color='skyblue')
-        ax.axhline(skor_atasan, color='green', linestyle='--', label=f'Skor Atasan ({skor_atasan})')
-        ax.axhline(mean, color='blue', linestyle='--', label=f'Rata-rata ({mean:.2f})')
-        ax.set_ylabel("Skor KPI")
-        ax.set_xlabel("NIPP Pekerja")
-        ax.set_xticklabels(nipp_labels, rotation=45, ha='right')
-        ax.legend()
+        ax1.bar(nipp_labels, skor_bawahan, color='skyblue', label='Skor KPI Bawahan')
+        ax1.axhline(skor_atasan, color='green', linestyle='--', linewidth=2, label=f'Skor Atasan ({skor_atasan:.3f})')
+        ax1.axhline(mean, color='blue', linestyle='--', linewidth=2, label=f'Rata-rata ({mean:.2f})')
+        ax1.set_ylabel("Skor KPI")
+        ax1.set_xlabel("NIPP Pekerja")
+        ax1.set_xticklabels(nipp_labels, rotation=45, ha='right')
+
+        # Distribusi Normal Overlay
+        ax2 = ax1.twinx()
+        x = np.linspace(min(skor_bawahan)-5, max(skor_bawahan)+5, 200)
+        y = norm.pdf(x, mean, std)
+        ax2.plot(x, y, color='red', label='Kurva Normal')
+        ax2.set_ylabel("Density", color='red')
+        ax2.tick_params(axis='y', labelcolor='red')
+
+        fig.tight_layout()
+        fig.legend(loc='upper left', bbox_to_anchor=(0.01, 0.99))
         st.pyplot(fig)
 
         # Tampilkan daftar NIPP Bawahan
@@ -67,4 +77,3 @@ else:
         st.markdown(f"**Rata-rata Skor KPI Bawahan**: {mean:.2f}")
         st.markdown(f"**Skor KPI Atasan**: {skor_atasan:.2f}")
         st.markdown(f"**Gap Atasan vs Rata-rata Bawahan**: {gap_percent:.2f}%")
-
